@@ -9,23 +9,33 @@
 
     <form action="#" method="post">
         <p>
+            <label for="user_first_name"><b>Enter first name</b></label>
+            <input id="user_first_name" type="text" placeholder="Enter first name" name="user_first_name" size=50 required><br>
+        </p>
+
+        <p>
+            <label for="user_last_name"><b>Enter last name</b></label>
+            <input id="user_last_name" type="text" placeholder="Enter first name" name="user_last_name" size=50 required><br>
+        </p>
+
+        <p>
             <label for="new_username"><b>Enter username</b></label>
-            <input id="new_username" type="text" placeholder="Enter username" name="new_username" required><br>
+            <input id="new_username" type="text" placeholder="Enter username" name="new_username" size=50 required><br>
         </p>
 
         <p>
             <label for="new_email"><b>Enter email</b></label>
-            <input id="new_email" type="text" placeholder="Enter email" name="new_email" required><br>
+            <input id="new_email" type="text" placeholder="Enter email" name="new_email" size=50 required><br>
         </p>
 
         <p>
             <label for="new_password"><b>Enter password</b></label>
-            <input id="new_password" type="password" placeholder="Enter password" name="new_password" required><br>
+            <input id="new_password" type="password" placeholder="Enter password" name="new_password" minlength="8" size=50 required><br>
         </p>
 
         <p>
             <label for="new_confirm_password"><b>Confirm password</b></label>
-            <input id="new_confirm_password" type="password" placeholder="Confirm password" name="new_confirm_password" required><br>
+            <input id="new_confirm_password" type="password" placeholder="Confirm password" minlength="8" name="new_confirm_password" size=50 required><br>
         </p>
         <input id="register_button" type="submit" name="signup_submit" value="Register">
     </form>
