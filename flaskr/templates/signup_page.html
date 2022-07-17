@@ -7,10 +7,10 @@
 <body>
     <h1>Enter your details for registrations</h1>
 
-    <form>
+    <form action="#" method="post">
         <p>
             <label for="new_username"><b>Enter username</b></label>
-            <input id="new_username" type="text" placeholder="Enter username" name="new_username" required /><br>
+            <input id="new_username" type="text" placeholder="Enter username" name="new_username" required><br>
         </p>
 
         <p>
@@ -27,8 +27,7 @@
             <label for="new_confirm_password"><b>Confirm password</b></label>
             <input id="new_confirm_password" type="password" placeholder="Confirm password" name="new_confirm_password" required><br>
         </p>
-
-        <input id="register_button" type="submit" value="Register">
+        <input id="register_button" type="submit" name="signup_submit" value="Register">
     </form>
 </body>
 </html>
