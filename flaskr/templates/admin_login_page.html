@@ -2,9 +2,20 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Admin Login</title>
+    <title>Login Page</title>
 </head>
 <body>
-
+    <form action="#" method="post">
+        <p>
+            <label for="login_username"> <b>Enter username</b> </label>
+            <input id="login_username" type="text" placeholder="Enter username" name="login_username" size=50 required><br>
+        </p>
+        <p>
+            <label for="login_password"><b>Enter password</b></label>
+            <input id="login_password" type="password" placeholder="Enter password" name="login_password" minlength="8" size=50 required><br>
+        </p>
+        <input id="login_button" type="submit" name="login_button" value="Login">
+    </form>
 </body>
 </html>
+

@@ -1,40 +1,49 @@
-from flask import Flask, render_template, request, url_for, redirect, flash
-from flask_sqlalchemy import SQLAlchemy
+from flask import Blueprint, render_template, request, flash, redirect, url_for, session
 from werkzeug.security import generate_password_hash, check_password_hash
+from flaskr.models import db, User, AdminDB, QuestionSetter
 from datetime import datetime
-from flaskr.models import User, AdminDB, db
-# from flask_admin import Admin
-from flask_admin.contrib.sqla import ModelView
-from flask_basicauth import BasicAuth
 from flask_login import login_user, login_required, current_user, logout_user
 
-app = Flask(__name__)
-app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://postgres:Database#2022@localhost/flask_movie'
-app.config['SECRET_KEY'] = '12345'
+auth = Blueprint("auth", __name__)
 
 
-def init_db():
-    db.init_app(app)
-    db.app = app
-    db.create_all()
-
-
-@app.route('/')
-def homepage():
-    return render_template('homepage.html')
-
-
-@app.route('/login_page', methods=["POST", "GET"])
+@auth.route('/login', methods=["POST", "GET"])
 def login():
     if request.method == "POST":
         entered_user_name = request.form.get("login_username")
         entered_password = request.form.get("login_password")
 
         user_data = User.query.filter_by(username=entered_user_name).first()
+        admin_data = AdminDB.query.filter_by(admin_username=entered_user_name).first()
+        question_setter_data = QuestionSetter.query.filter_by(question_setter_username=entered_user_name).first()
+
+        print(isinstance(user_data, User))
+        print(isinstance(admin_data, AdminDB))
+        print(isinstance(question_setter_data, QuestionSetter))
+
+        print(user_data)
+        print(admin_data)
+        print(question_setter_data)
 
         if user_data is not None:
             if check_password_hash(user_data.hashed_password, entered_password):
-                flash("Logged in", category="success")
+                flash("Logged in as user", category="success")
+                login_user(user=user_data, remember=True)
+                return redirect(url_for('views.home'))
+            else:
+                flash("Please enter correct password", category="error")
+        elif admin_data is not None:
+            if check_password_hash(admin_data.hashed_password, entered_password):
+                flash("Logged in as admin", category="success")
+                login_user(user=admin_data, remember=True)
+                return redirect(url_for('views.home'))
+            else:
+                flash("Please enter correct password", category="error")
+        elif question_setter_data is not None:
+            if check_password_hash(question_setter_data.hashed_password, entered_password):
+                flash("Logged in as question setter", category="success")
+                login_user(user=question_setter_data, remember=True)
+                return redirect(url_for('views.home'))
             else:
                 flash("Please enter correct password", category="error")
         else:
@@ -43,8 +52,8 @@ def login():
     return render_template('login_page.html')
 
 
-@app.route('/signup_page', methods=["GET", "POST"])
-def signup_page():
+@auth.route('/signup', methods=["GET", "POST"])
+def signup():
     if request.method == "POST":
         user_name = request.form.get("new_username")
         user_emailid = request.form.get("new_email")
@@ -58,6 +67,7 @@ def signup_page():
 
         user_name_exists = User.query.filter_by(username=user_name).first()
         user_emailid_exists = User.query.filter_by(user_emailid=user_emailid).first()
+
         admin_name_exists = AdminDB.query.filter_by(admin_username=user_name).first()
         admin_emailid_exists = AdminDB.query.filter_by(admin_emailid=user_emailid).first()
 
@@ -66,7 +76,7 @@ def signup_page():
             return redirect(url_for('signup_page'))
         elif user_name_exists is not None or user_emailid_exists is not None or admin_name_exists is not None or admin_emailid_exists is not None:
             print("User with the given credentials already exists")
-            return redirect(url_for('homepage'))
+            return redirect(url_for('homepage.html'))
         elif user_name_exists is None and user_emailid_exists is None:
             user_db_obj = User(user_name, user_emailid, user_first_name, user_last_name, user_created_at,
                                hashed_password)
@@ -78,25 +88,9 @@ def signup_page():
         return render_template('signup_page.html')
 
 
-
-@app.route('/logout')
+@auth.route('/logout')
+@login_required
 def logout():
-    return render_template('homepage.html')
+    logout_user()
+    return redirect(url_for('views.homepage'))
 
-
-# @app.route('/admin')
-# @basic_auth.required
-# def admin():
-#     return render_template('admin/index.html')
-
-
-# admin = Admin(app)
-# admin.add_view(ModelView(User, db.session))
-# admin.add_view(ModelView(Admin, db.session))
-
-if __name__ == "__main__":
-    init_db()
-    app.run(debug=True)
-
-
-# <a class="nav-link" href="/create-quiz">Create Quiz <span class="sr-only">(current)</span></a>

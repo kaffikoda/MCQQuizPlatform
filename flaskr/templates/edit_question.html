@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Edit Question</title>
+
+</head>
+<body>
+<div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLongTitle">Modal title</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <form action="" method="POST">
+            <div class="form-group row">
+              <label for="inputQuestion" class="col-sm-2 col-form-label">Question</label>
+              <div class="col-sm-10">
+                <input type="text" class="form-control" id="inputQuestion" name="entered-question" placeholder="Enter question">
+              </div>
+            </div>
+            <fieldset class="form-group">
+              <div class="row">
+                <legend class="col-form-label col-sm-2 pt-0">Options</legend>
+                <div class="col-sm-10">
+                  <div class="input-group">
+                    <div class="input-group-prepend">
+                      <div class="input-group-text">
+                        <input value="option1" type="radio" aria-label="Radio button for following text input" name="correctOption">
+                      </div>
+                    </div>
+                    <input type="text" class="form-control" aria-label="Text input with radio button" name="option1" placeholder="Option1"><br>
+                  </div><br>
+                  <div class="input-group">
+                    <div class="input-group-prepend">
+                      <div class="input-group-text">
+                        <input value="option2" type="radio" aria-label="Radio button for following text input" name="correctOption">
+                      </div>
+                    </div>
+                    <input type="text" class="form-control" aria-label="Text input with radio button" name="option2" placeholder="Option2">
+                  </div><br>
+                  <div class="input-group">
+                    <div class="input-group-prepend">
+                      <div class="input-group-text">
+                        <input value="option3" type="radio" aria-label="Radio button for following text input" name="correctOption">
+                      </div>
+                    </div>
+                    <input type="text" class="form-control" aria-label="Text input with radio button" name="option3" placeholder="Option3">
+                  </div><br>
+                  <div class="input-group">
+                    <div class="input-group-prepend">
+                      <div class="input-group-text">
+                        <input value="option4" type="radio" aria-label="Radio button for following text input" name="correctOption">
+                      </div>
+                    </div>
+                    <input type="text" class="form-control" aria-label="Text input with radio button" name="option4" placeholder="Option4">
+                  </div><br>
+                </div>
+              </div>
+              <div class="modal-footer">
+                <button class="btn btn-secondary" data-dismiss="modal" type="submit" value="Close">Close</button>
+                <button class="btn btn-primary" type="submit" value="Add question" id="addQuestion" name="addQuestion">Add</button>
+              </div>
+            </fieldset>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</body>
+</html>
