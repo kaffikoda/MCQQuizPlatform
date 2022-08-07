@@ -97,6 +97,7 @@ class QuizDetails(db.Model):
     quiz_created_at = db.Column(db.DateTime, nullable=False)
     quiz_name = db.Column(db.String(80), nullable=False)
     quiz_question = db.relationship("QuizQuestions")
+    questions_attempted = db.relationship("QuestionAttemptedDB")
 
     def __init__(self, quiz_made_by, quiz_created_at, quiz_name):
         self.quiz_made_by = quiz_made_by
@@ -138,13 +139,35 @@ class AttemptedDB(db.Model):
     __tablename__ = "quiz_attempted"
 
     id = db.Column(db.Integer, primary_key=True)
-    question_quiz_id = db.Column(db.Integer, db.ForeignKey("quiz_details.quiz_id"), nullable=False)
+    quiz_id = db.Column(db.Integer, db.ForeignKey("quiz_details.quiz_id"), nullable=False)
     quiz_attempted_by = db.Column(db.Integer, nullable=True)
     attempted_at = db.Column(db.DateTime, nullable=False)
     quiz_score = db.Column(db.Integer, nullable=True)
     quiz_by_question_setter = db.relationship("QuizDetails")
 
-    def __init__(self, question_quiz_id, quiz_attempted_by, attempted_at):
-        self.question_quiz_id = question_quiz_id
+    def __init__(self, quiz_id, quiz_attempted_by, attempted_at):
+        self.quiz_id = quiz_id
         self.quiz_attempted_by = quiz_attempted_by
         self.attempted_at = attempted_at
+        self.quiz_score = 0
+
+
+class QuestionAttemptedDB(db.Model):
+    __tablename__ = "questions_attempted"
+
+    id = db.Column(db.Integer, primary_key=True)
+    attempted_quiz_id = db.Column(db.Integer, db.ForeignKey("quiz_details.quiz_id"), nullable=False)
+    quiz_attempted_by = db.Column(db.Integer, nullable=False)
+    quiz_question_id = db.Column(db.Integer, nullable=False)
+    correct_answer = db.Column(db.Integer, nullable=False)
+    answer_given = db.Column(db.Integer, nullable=False)
+    total_score = db.Column(db.Integer, nullable=False)
+    quiz_attempted = db.relationship("QuizDetails")
+
+    def __init__(self, attempted_quiz_id, quiz_attempted_by, quiz_question_id, correct_answer, answer_given):
+        self.attempted_quiz_id = attempted_quiz_id
+        self.quiz_attempted_by = quiz_attempted_by
+        self.quiz_question_id = quiz_question_id
+        self.correct_answer = correct_answer
+        self.answer_given = answer_given
+        self.total_score = 0

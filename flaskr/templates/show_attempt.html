@@ -1,0 +1,59 @@
+{% extends "logged_in_base.html" %}
+{% block title %}Your Attempt{% endblock %}
+
+
+{% block content1 %}
+    {% for question_number in range(number_of_questions) %}
+        {% if questions_details_obj[question_number].question_id in questions_attempted_by_user_dict %}
+             <a href="" class="list-group-item list-group-item-success" name="questionNo" data-toggle="modal" data-target="#exampleModal{{question_number}}">Question {{question_number+1}}.</a>
+        {% else %}
+            <a href="" class="list-group-item list-group-item-action"  data-toggle="modal" data-target="#exampleModal{{question_number}}">Question {{question_number+1}}.</a>
+        {% endif %}
+            <!-- Modal -->
+            <div class="modal fade" id="exampleModal{{question_number}}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="exampleModalLabel">Question {{question_number+1}}.</h5>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                    <div class="modal-body">
+                        <form action="" method="POST">
+                            <div class="form-group row">
+                                <h4> {{questions_details_obj[question_number].question}} </h4>
+                            </div>
+                            <fieldset class="form-group">
+                            <div class="row">
+                                <legend class="col-form-label col-sm-2 pt-0"><h6>Options</h6></legend>
+                                    <div class="col-sm-10">
+                                        <div class="input-group-prepend">
+                                            <h5> 1. {{questions_details_obj[question_number].first_option}} </h5>
+                                        </div><br>
+                                        <div class="input-group-prepend">
+                                            <h5> 2. {{questions_details_obj[question_number].second_option}} </h5>
+                                        </div><br>
+                                        <div class="input-group-prepend">
+                                            <h5> 3. {{questions_details_obj[question_number].third_option}} </h5>
+                                        </div><br>
+                                        <div class="input-group-prepend">
+                                            <h5> 4. {{questions_details_obj[question_number].fourth_option}} </h5>
+                                        </div><br>
+                                    </div>
+                                </div>
+                                {% if questions_details_obj[question_number].question_id in questions_attempted_by_user_dict %}
+                                    <h6> Your response:- {{questions_attempted_by_user_dict[questions_details_obj[question_number].question_id]}} </h6>
+                                {% endif %}
+                                    <h6>Correct response:- {{questions_details_obj[question_number].correct_answer}} </h6>
+                                <div class="modal-footer">
+                                    <button class="btn btn-secondary" data-dismiss="modal" type="submit" value="Close">Close</button>
+                                </div>
+                            </fieldset>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            </div>
+    {% endfor %}
+{% endblock %}

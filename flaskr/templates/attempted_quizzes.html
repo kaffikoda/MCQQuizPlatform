@@ -1,0 +1,12 @@
+{% extends "logged_in_base.html" %}
+{% block title %}Attempted Quizzes{% endblock %}
+
+
+
+{% block quiz_name_content %}
+      {% for quiz in all_quizzes_available %}
+            {% if quiz.quiz_id in attempted_by_user_list %}
+                  <a href="{{url_for('views.show_attempt', quiz_id=quiz.quiz_id)}}" class="list-group-item">{{ quiz.quiz_name }}</a>
+            {% endif %}
+      {% endfor %}
+{% endblock %}
