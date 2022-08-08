@@ -1,14 +1,19 @@
 {% extends "logged_in_base.html" %}
-{% block title %}Your Attempt{% endblock %}
+{% block title %}Your Questions{% endblock %}
 
 
 {% block content1 %}
     {% for question_number in range(number_of_questions) %}
-        {% if questions_details_obj[question_number].question_id in questions_attempted_by_user_dict %}
-             <a href="" class="list-group-item list-group-item-success" name="questionNo" data-toggle="modal" data-target="#exampleModal{{question_number}}">Question {{question_number+1}}.</a>
-        {% else %}
-            <a href="" class="list-group-item list-group-item-action"  data-toggle="modal" data-target="#exampleModal{{question_number}}">Question {{question_number+1}}.</a>
+        {% if flag == 0 %}
+            {% if questions_details_obj[question_number].question_id in questions_attempted_by_user_dict %}
+                {% if questions_attempted_by_user_dict[questions_details_obj[question_number].question_id] == questions_details_obj[question_number].correct_answer %}
+                    <a href="" class="list-group-item list-group-item-success" name="questionNo" data-toggle="modal" data-target="#exampleModal{{question_number}}">Question {{question_number+1}}.</a>
+                {% else %}
+                    <a href="" class="list-group-item list-group-item-danger"  data-toggle="modal" data-target="#exampleModal{{question_number}}">Question {{question_number+1}}.</a>
+                {% endif %}
+            {% endif %}
         {% endif %}
+        <a href="" class="list-group-item list-group-item-action"  data-toggle="modal" data-target="#exampleModal{{question_number}}">Question {{question_number+1}}.</a>
             <!-- Modal -->
             <div class="modal fade" id="exampleModal{{question_number}}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
                 <div class="modal-dialog modal-dialog-centered" role="document">
@@ -42,13 +47,15 @@
                                         </div><br>
                                     </div>
                                 </div>
-                                {% if questions_details_obj[question_number].question_id in questions_attempted_by_user_dict %}
-                                    <h6> Your response:- {{questions_attempted_by_user_dict[questions_details_obj[question_number].question_id]}} </h6>
+                                {% if flag == 0 %}
+                                    {% if questions_details_obj[question_number].question_id in questions_attempted_by_user_dict %}
+                                        <h6> Your response:- {{questions_attempted_by_user_dict[questions_details_obj[question_number].question_id]}} </h6>
+                                    {% endif %}
                                 {% endif %}
                                     <h6>Correct response:- {{questions_details_obj[question_number].correct_answer}} </h6>
-                                <div class="modal-footer">
-                                    <button class="btn btn-secondary" data-dismiss="modal" type="submit" value="Close">Close</button>
-                                </div>
+                                    <div class="modal-footer">
+                                        <button class="btn btn-secondary" data-dismiss="modal" type="submit" value="Close">Close</button>
+                                    </div>
                             </fieldset>
                         </form>
                     </div>
@@ -56,4 +63,7 @@
             </div>
             </div>
     {% endfor %}
+{% endblock %}
+{% block button%}
+<a href="{{url_for('views.home')}}" class="btn btn-primary" role="button">Go to Homepage</a>
 {% endblock %}

@@ -9,8 +9,7 @@ from sqlalchemy import and_
 views = Blueprint("views", __name__)
 
 qu = []
-
-attempted_questions_list = []
+ATTEMPTED_QUESTIONS_LIST = []
 
 
 @views.route('/')
@@ -128,8 +127,6 @@ def create_quiz():
     return render_template('create_quiz.html', questions_created_tillnow=qu)
 
 
-# def create_quiz_details():
-
 @views.route('/delete_question/<int:quiz_id>/<int:question_id>', methods=["POST"])
 def delete_question(quiz_id, question_id):
     delete_obj = QuizQuestions.query.filter_by(question_id=question_id).first()
@@ -190,24 +187,14 @@ def available_quizzes():
     quiz_attempted_by_user_list = [details.quiz_id for details in quiz_attempted_by_user]
 
     all_quizzes_available = QuizDetails.query.all()
-    # available_quizzes_for_user = [details.quiz_id for details in all_quizzes_available if details.quiz_id not in quiz_attempted_by_user_list]
-    # print(available_quizzes_for_user)
 
     return render_template('available_quizzes.html', quiz_attempted_by_user_list=quiz_attempted_by_user_list,
-                           all_quizzes_available=all_quizzes_available)
+                           all_quizzes_available=all_quizzes_available, flag=0)
 
 
 @views.route('/play_quiz/<int:quiz_id>', methods=["GET", "POST"])
 def play_quiz(quiz_id):
     questions = QuizQuestions.query.filter_by(question_quiz_id=quiz_id)
-    # print(type(questions))
-    # print("Size:-", questions.count())
-    # print(current_user.user_id)
-
-    # print(questions[3].question)
-
-    # empty_list = []
-    # print(empty_list)
 
     number_of_questions = questions.count()
 
@@ -217,9 +204,6 @@ def play_quiz(quiz_id):
     attempted_questions = QuestionAttemptedDB.query.filter(and_(QuestionAttemptedDB.attempted_quiz_id == quiz_id,
                                                                 QuestionAttemptedDB.quiz_attempted_by == current_user.user_id))
 
-    # if attempted_questions is not None:
-    #     attempted_questions_list = [quiz_id.quiz_question_id for quiz_id in attempted_questions]
-
     if attempted_or_not is None:
         quiz_attempted_obj = AttemptedDB(quiz_id=quiz_id, quiz_attempted_by=current_user.user_id,
                                          attempted_at=datetime.now())
@@ -227,12 +211,6 @@ def play_quiz(quiz_id):
         db.session.commit()
 
     if request.method == "POST" and "submitAnswer" in request.form:
-        # print(request.form.get("submitAnswer"))
-        # correct_answer = db.session.query(QuizQuestions).get(request.form.get("submitAnswer")).correct_answer
-        # print("Hello:-", correct_answer)
-        # answer_given = int(request.form.get("selectedOption"))
-        # print(type(answer_given))
-        # question_attempted = QuestionAttemptedDB(quiz_id, )
 
         correct_answer = db.session.query(QuizQuestions).get(request.form.get("submitAnswer")).correct_answer
         answer_given = int(request.form.get("selectedOption"))
@@ -247,32 +225,36 @@ def play_quiz(quiz_id):
         db.session.add(question_attempted_obj)
         db.session.commit()
 
-        # attempted_questions = QuestionAttemptedDB.query.filter(and_(QuestionAttemptedDB.attempted_quiz_id ==
-        # quiz_id, QuestionAttemptedDB.quiz_attempted_by == current_user.user_id))
+        global ATTEMPTED_QUESTIONS_LIST
+        ATTEMPTED_QUESTIONS_LIST = [ques.quiz_question_id for ques in attempted_questions]
 
-        global attempted_questions_list
-        attempted_questions_list = [quiz_id.quiz_question_id for quiz_id in attempted_questions]
-        # print(attempted_questions)
+        print(ATTEMPTED_QUESTIONS_LIST)
 
-        # attempted_questions_list = [quiz_id.quiz_question_id for quiz_id in attempted_questions]
-        print(attempted_questions_list)
+        return redirect(url_for('views.play_quiz', quiz_id=quiz_id))
+    elif request.method == "POST" and "submitQuiz" in request.form:
+        questions_attempted_by_user_obj = QuestionAttemptedDB.query.filter(
+            and_(QuestionAttemptedDB.attempted_quiz_id == quiz_id,
+                 QuestionAttemptedDB.quiz_attempted_by == current_user.user_id))
 
-        return render_template('play_quiz.html', questions=questions, number_of_questions=number_of_questions,
-                               attempted_questions_list=attempted_questions_list)
+        total_score = 0
+        for ques in questions_attempted_by_user_obj:
+            if ques.answer_given == ques.correct_answer:
+                total_score += 1
 
-    # elif request.method == "POST":
-    #     print(request.form)
-    #     print(request.form.get('submitAnswer'))
-    #
-    #     global question_list
-    #     question_list.append(int(request.form.get('submitAnswer')))
-    #     print(question_list)
+        # print("Hello!!!!", total_score)
 
-    # if attempted_questions is None:
-    #     return render_template('play_quiz.html', questions=questions, number_of_questions=number_of_questions)
+        quiz_attempted_by_user_obj = AttemptedDB.query.filter(and_(AttemptedDB.quiz_id == quiz_id, AttemptedDB.quiz_attempted_by == current_user.user_id)).first()
+        quiz_attempted_by_user_obj.quiz_score = total_score
+        db.session.commit()
+
+        # print(quiz_attempted_by_user_obj.quiz_score)
+
+
+
+        return redirect(url_for('views.home'))
 
     return render_template('play_quiz.html', questions=questions, number_of_questions=number_of_questions,
-                           attempted_questions_list=attempted_questions_list)
+                           attempted_questions_list=ATTEMPTED_QUESTIONS_LIST, quiz_id=quiz_id)
 
 
 @views.route('/attempted_quizzes', methods=["GET"])
@@ -283,20 +265,29 @@ def attempted_quizzes():
     all_quizzes_available = QuizDetails.query.all()
 
     return render_template('attempted_quizzes.html', all_quizzes_available=all_quizzes_available,
-                           attempted_by_user_list=attempted_by_user_list)
+                           attempted_by_user_list=attempted_by_user_list, flag=0)
 
 
-@views.route('/show_attempt/<int:quiz_id>', methods=["GET"])
-def show_attempt(quiz_id):
-    attempt_by_user_obj = QuestionAttemptedDB.query.filter(and_(QuestionAttemptedDB.attempted_quiz_id == quiz_id,
-                                                                QuestionAttemptedDB.quiz_attempted_by == current_user.user_id))
-
-    questions_attempted_by_user_dict = {quiz.quiz_question_id:quiz.answer_given for quiz in attempt_by_user_obj}
+@views.route('/questions/<int:quiz_id>', methods=["GET"])
+def show_questions(quiz_id):
     questions_details_obj = QuizQuestions.query.filter_by(question_quiz_id=quiz_id)
     number_of_questions = questions_details_obj.count()
-    print(number_of_questions)
-    print(attempt_by_user_obj[0].quiz_question_id)
 
-    return render_template('show_attempt.html', questions_attempted_by_user_dict=questions_attempted_by_user_dict,
-                           number_of_questions=number_of_questions, questions_details_obj=questions_details_obj,
-                           questions_attempted_details=attempt_by_user_obj)
+    if isinstance(current_user, User):
+        attempt_by_user_obj = QuestionAttemptedDB.query.filter(and_(QuestionAttemptedDB.attempted_quiz_id == quiz_id,
+                                                                    QuestionAttemptedDB.quiz_attempted_by == current_user.user_id))
+        questions_attempted_by_user_dict = {quiz.quiz_question_id: quiz.answer_given for quiz in attempt_by_user_obj}
+
+        return render_template('show_questions.html', questions_attempted_by_user_dict=questions_attempted_by_user_dict,
+                               number_of_questions=number_of_questions, questions_details_obj=questions_details_obj,
+                               questions_attempted_details=attempt_by_user_obj, flag=0)
+
+    return render_template('show_questions.html', questions_details_obj=questions_details_obj,
+                           number_of_questions=number_of_questions, flag=1)
+
+
+@views.route('/created_quizzes/', methods=["GET"])
+def created_quizzes():
+    quiz_created_by_qs = QuizDetails.query.filter_by(quiz_made_by=current_user.question_setter_id)
+
+    return render_template('attempted_quizzes.html', all_quizzes_available=quiz_created_by_qs, flag=1)

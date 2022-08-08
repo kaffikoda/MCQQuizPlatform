@@ -1,12 +1,18 @@
 {% extends "logged_in_base.html" %}
-{% block title %}Attempted Quizzes{% endblock %}
+{% block title %}Quizzes{% endblock %}
 
 
 
 {% block quiz_name_content %}
-      {% for quiz in all_quizzes_available %}
-            {% if quiz.quiz_id in attempted_by_user_list %}
-                  <a href="{{url_for('views.show_attempt', quiz_id=quiz.quiz_id)}}" class="list-group-item">{{ quiz.quiz_name }}</a>
-            {% endif %}
-      {% endfor %}
+      {% if flag == 0 %}
+            {% for quiz in all_quizzes_available %}
+                  {% if quiz.quiz_id in attempted_by_user_list %}
+                        <a href="{{url_for('views.show_questions', quiz_id=quiz.quiz_id)}}" class="list-group-item">{{ quiz.quiz_name }}</a>
+                  {% endif %}
+            {% endfor %}
+      {% elif flag == 1 %}
+            {% for quiz in all_quizzes_available %}
+                  <a href="{{url_for('views.show_questions', quiz_id=quiz.quiz_id)}}" class="list-group-item">{{ quiz.quiz_name }}</a>
+            {% endfor %}
+      {% endif %}
 {% endblock %}

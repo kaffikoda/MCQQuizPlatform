@@ -2,11 +2,10 @@
 {% block title %}Available Quizzes{% endblock %}
 
 
-
 {% block quiz_name_content %}
       {% for quiz in all_quizzes_available %}
             {% if quiz.quiz_id not in quiz_attempted_by_user_list %}
-                  <a href="/play_quiz/{{quiz.quiz_id}}" class="list-group-item">{{ quiz.quiz_name }}</a>
+                  <a href="{{url_for('views.play_quiz', quiz_id=quiz.quiz_id)}}" class="list-group-item">{{ quiz.quiz_name }}</a>
             {% endif %}
       {% endfor %}
 {% endblock %}

@@ -5,7 +5,7 @@
 {% block content1 %}
     {% for question_number in range(number_of_questions) %}
         {% if questions[question_number].question_id in attempted_questions_list %}
-             <a href="" class="list-group-item list-group-item-success" name="questionNo">Question {{question_number+1}}.</a>
+             <a href="" class="list-group-item list-group-item-primary" name="questionNo">Question {{question_number+1}}.</a>
         {% else %}
             <a href="" class="list-group-item list-group-item-action"  data-toggle="modal" data-target="#exampleModal{{question_number}}">Question {{question_number+1}}.</a>
             <!-- Modal -->
@@ -54,5 +54,11 @@
         {% endif %}
     {% endfor %}
 {% endblock %}
+{% block button %}
+<form action="{{url_for('views.play_quiz', quiz_id=quiz_id)}}" method="post">
+    <input type="submit" name = "submitQuiz" value="Submit Quiz" class="btn btn-primary">
+</form>
+{% endblock %}
+
 
 
