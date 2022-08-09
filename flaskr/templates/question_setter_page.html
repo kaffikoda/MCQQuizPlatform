@@ -24,7 +24,7 @@
           </li>
         </ul>
       </div>
-<form action="/create-quiz" method="post">
+<form action="{{url_for('views.create_quiz')}}" method="post">
         <!-- Modal -->
 <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
   <div class="modal-dialog" role="document">
@@ -48,5 +48,6 @@
 </div>
 </form>
 {% endblock %}
+
 
 

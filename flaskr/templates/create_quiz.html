@@ -1,42 +1,143 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <title>Create Quiz</title>
-  <link
-  rel="stylesheet"
-  href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
-  integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh"
-  crossorigin="anonymous"
-  />
-  <link
-  rel="stylesheet"
-  href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css"
-  crossorigin="anonymous"
-  />
-</head>
-<body>
-  <!-- Button trigger modal -->
-  <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModalCenter">
-    Add question
-  </button>
+{% extends "logged_in_base.html" %}
+{% block title %}Create Quiz{% endblock %}
 
-  <!-- Modal -->
-  <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered" role="document">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title" id="exampleModalLongTitle">Modal title</h5>
-          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-            <span aria-hidden="true">&times;</span>
-          </button>
-        </div>
+{% block button1 %}
+<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModalCenter">Add question</button>
+<!-- Modal -->
+<div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalCenterTitle">Add Question</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
         <div class="modal-body">
           <form action="" method="POST">
             <div class="form-group row">
               <label for="inputQuestion" class="col-sm-2 col-form-label">Question</label>
               <div class="col-sm-10">
-                <input type="text" class="form-control" id="inputQuestion" name="entered-question" placeholder="Enter question">
+                <input type="text" class="form-control" id="inputQuestion" name="inputQuestion" placeholder="Enter question">
+              </div>
+            </div>
+            <fieldset class="form-group">
+              <div class="row">
+                <legend class="col-form-label col-sm-2 pt-0">Options</legend>
+                <div class="col-sm-10">
+                  <div class="input-group">
+                    <div class="input-group-prepend">
+                      <div class="input-group-text">
+                        <input value="1" type="radio" aria-label="Radio button for following text input" name="correctOption">
+                      </div>
+                    </div>
+                    <input type="text" class="form-control" aria-label="Text input with radio button" name="option1" placeholder="Option1"><br>
+                  </div><br>
+                  <div class="input-group">
+                    <div class="input-group-prepend">
+                      <div class="input-group-text">
+                        <input value="2" type="radio" aria-label="Radio button for following text input" name="correctOption">
+                      </div>
+                    </div>
+                    <input type="text" class="form-control" aria-label="Text input with radio button" name="option2" placeholder="Option2">
+                  </div><br>
+                  <div class="input-group">
+                    <div class="input-group-prepend">
+                      <div class="input-group-text">
+                        <input value="3" type="radio" aria-label="Radio button for following text input" name="correctOption">
+                      </div>
+                    </div>
+                    <input type="text" class="form-control" aria-label="Text input with radio button" name="option3" placeholder="Option3">
+                  </div><br>
+                  <div class="input-group">
+                    <div class="input-group-prepend">
+                      <div class="input-group-text">
+                        <input value="4" type="radio" aria-label="Radio button for following text input" name="correctOption">
+                      </div>
+                    </div>
+                    <input type="text" class="form-control" aria-label="Text input with radio button" name="option4" placeholder="Option4">
+                  </div><br>
+                </div>
+              </div>
+              <div class="modal-footer">
+                <button class="btn btn-secondary" data-dismiss="modal" type="submit" value="close">Close</button>
+                <button class="btn btn-primary" type="submit" value="Add question" id="addQuestion" name="addQuestion">Add Question</button>
+              </div>
+            </fieldset>
+          </form>
+        </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
+
+
+{% block content1 %}
+  {% for question_number in range(number_of_questions) %}
+    <a href="" class="list-group-item list-group-item-action"  data-toggle="modal" data-target="#exampleModal{{question_number}}">Question {{question_number+1}}.</a>
+
+<!-- Modal -->
+    <div class="modal fade" id="exampleModal{{question_number}}" tabindex="-1" role="dialog" aria-labelledby="exampleModalTitle" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h6 class="modal-title" id="exampleModalTitle">Question {{question_number+1}}.</h6>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <form action="" method="POST">
+          <div class="form-group row">
+            <p> <b>{{questions_created_tillnow_obj[question_number].question}}</b> </p>
+          </div>
+          <fieldset class="form-group">
+            <div class="row">
+              <legend class="col-form-label col-sm-2 pt-0"><h6>Options</h6></legend>
+              <div class="col-sm-10">
+                <div class="input-group-prepend">
+                  <p> 1. {{questions_created_tillnow_obj[question_number].first_option}} </p>
+                </div><br>
+                <div class="input-group-prepend">
+                  <p> 2. {{questions_created_tillnow_obj[question_number].second_option}} </p>
+                </div><br>
+                <div class="input-group-prepend">
+                  <p> 3. {{questions_created_tillnow_obj[question_number].third_option}} </p>
+                </div><br>
+                <div class="input-group-prepend">
+                  <p> 4. {{questions_created_tillnow_obj[question_number].fourth_option}} </p>
+                </div><br>
+              </div>
+            </div>
+            <p>Correct response:- {{questions_created_tillnow_obj[question_number].correct_answer}} </p>
+            <div class="modal-footer">
+              <a class="btn btn-primary" href="{{url_for('views.edit_question', quiz_id=questions_created_tillnow_obj[question_number].question_quiz_id, question_id=questions_created_tillnow_obj[question_number].question_id)}}" data-toggle="modal" data-target="#editModalCenter" role="button">
+                Edit
+              </a>
+              <a class="btn btn-danger" href="{{url_for('views.delete_question', quiz_id=questions_created_tillnow_obj[question_number].question_quiz_id, question_id=questions_created_tillnow_obj[question_number].question_id)}}" role="button">Delete</a>
+            </div>
+          </fieldset>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+               <!-- Modal -->
+  <div class="modal fade" id="editModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="editModalLongTitle">Enter edited question</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <form action="{{url_for('views.edit_question', quiz_id=questions_created_tillnow_obj[question_number].question_quiz_id, question_id=questions_created_tillnow_obj[question_number].question_id)}}" method="POST">
+            <div class="form-group row">
+              <label for="editInputQuestion" class="col-sm-2 col-form-label">Question</label>
+              <div class="col-sm-10">
+                <input type="text" class="form-control" id="editInputQuestion" name="editedQuestion" placeholder="Enter edited question">
               </div>
             </div>
             <fieldset class="form-group">
@@ -79,7 +180,7 @@
               </div>
               <div class="modal-footer">
                 <button class="btn btn-secondary" data-dismiss="modal" type="submit" value="Close">Close</button>
-                <button class="btn btn-primary" type="submit" value="Add question" id="addQuestion" name="addQuestion">Add</button>
+                <button class="btn btn-primary" type="submit" value="saveEditQuestion" id="saveEditQuestion" name="saveEditQuestion">Save Changes</button>
               </div>
             </fieldset>
           </form>
@@ -87,121 +188,9 @@
       </div>
     </div>
   </div>
-   <div class="table-responsive">
-     <table class="table table-bordered">
-			<tr>
-				<th>Question</th>
-				<th>Option 1</th>
-				<th>Option 2</th>
-				<th>Option 3</th>
-				<th>Option 4</th>
-                <th>Correct Option</th>
-                <th>Actions</th>
-			</tr>
+  {% endfor %}
+{% endblock %}
 
-			{% for questions in questions_created_tillnow %}
-			<tr>
-				<td>{{ questions.question }}</td>
-				<td>{{ questions.first_option }}</td>
-				<td>{{ questions.second_option }}</td>
-				<td>{{ questions.third_option }}</td>
-				<td>{{ questions.fourth_option }}</td>
-                <td>{{ questions.correct_answer }}</td>
-                <td>
-                  <div class="btn-group">
-                    <a href="/edit_question/{{questions.question_quiz_id}}/{{questions.question_id}}"  data-toggle="modal" data-target="#editModalCenter{{questions.question_quiz_id, questions.question_id}}">
-                      <button type="button" class="btn btn-primary">Edit</button>
-                    </a>
-                    <form action="{{url_for('views.delete_question', quiz_id=questions.question_quiz_id, question_id=questions.question_id)}}" method="post">
-                      <input type="hidden" name="_method" value="DELETE">
-                      <input type="submit" value="Delete" class="btn btn-danger">
-                    </form>
-                  </div>
-                </td>
-			</tr>
-           <!-- Modal -->
-  <div class="modal fade" id="editModalCenter{{questions.question_quiz_id, questions.question_id}}" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered" role="document">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title" id="editModalLongTitle">Modal title</h5>
-          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-            <span aria-hidden="true">&times;</span>
-          </button>
-        </div>
-        <div class="modal-body">
-          <form action="/edit_question/{{questions.question_quiz_id}}/{{questions.question_id}}" method="POST">
-            <div class="form-group row">
-              <label for="inputQuestion" class="col-sm-2 col-form-label">Question</label>
-              <div class="col-sm-10">
-                <input type="text" class="form-control" id="editInputQuestion" name="edited-question" placeholder="Enter edited question">
-              </div>
-            </div>
-            <fieldset class="form-group">
-              <div class="row">
-                <legend class="col-form-label col-sm-2 pt-0">Options</legend>
-                <div class="col-sm-10">
-                  <div class="input-group">
-                    <div class="input-group-prepend">
-                      <div class="input-group-text">
-                        <input value="option1" type="radio" aria-label="Radio button for following text input" name="correctOption">
-                      </div>
-                    </div>
-                    <input type="text" class="form-control" aria-label="Text input with radio button" name="option1" placeholder="Option1"><br>
-                  </div><br>
-                  <div class="input-group">
-                    <div class="input-group-prepend">
-                      <div class="input-group-text">
-                        <input value="option2" type="radio" aria-label="Radio button for following text input" name="correctOption">
-                      </div>
-                    </div>
-                    <input type="text" class="form-control" aria-label="Text input with radio button" name="option2" placeholder="Option2">
-                  </div><br>
-                  <div class="input-group">
-                    <div class="input-group-prepend">
-                      <div class="input-group-text">
-                        <input value="option3" type="radio" aria-label="Radio button for following text input" name="correctOption">
-                      </div>
-                    </div>
-                    <input type="text" class="form-control" aria-label="Text input with radio button" name="option3" placeholder="Option3">
-                  </div><br>
-                  <div class="input-group">
-                    <div class="input-group-prepend">
-                      <div class="input-group-text">
-                        <input value="option4" type="radio" aria-label="Radio button for following text input" name="correctOption">
-                      </div>
-                    </div>
-                    <input type="text" class="form-control" aria-label="Text input with radio button" name="option4" placeholder="Option4">
-                  </div><br>
-                </div>
-              </div>
-              <div class="modal-footer">
-                <button class="btn btn-secondary" data-dismiss="modal" type="submit" value="Close">Close</button>
-                <button class="btn btn-primary" type="submit" value="Save changes" id="addEditQuestion" name="addEditQuestion">Save Changes</button>
-              </div>
-            </fieldset>
-          </form>
-        </div>
-      </div>
-    </div>
-  </div>
-			{% endfor %}
-		</table>
-   </div>
-  <script
-  src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
-  integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
-  crossorigin="anonymous"
-  ></script>
-  <script
-  src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"
-  integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
-  crossorigin="anonymous"
-  ></script>
-  <script
-  src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"
-  integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
-  crossorigin="anonymous"
-  ></script>
-</body>
-</html>
+{% block button%}
+<a href="{{url_for('views.home')}}" class="btn btn-primary" role="button">Go to Homepage</a>
+{% endblock %}

@@ -10,20 +10,20 @@ auth = Blueprint("auth", __name__)
 @auth.route('/login', methods=["POST", "GET"])
 def login():
     if request.method == "POST":
-        entered_user_name = request.form.get("login_username")
-        entered_password = request.form.get("login_password")
+        entered_user_name = request.form.get("loginUserName")
+        entered_password = request.form.get("loginPassword")
 
         user_data = User.query.filter_by(username=entered_user_name).first()
         admin_data = AdminDB.query.filter_by(admin_username=entered_user_name).first()
         question_setter_data = QuestionSetter.query.filter_by(question_setter_username=entered_user_name).first()
 
-        print(isinstance(user_data, User))
-        print(isinstance(admin_data, AdminDB))
-        print(isinstance(question_setter_data, QuestionSetter))
-
-        print(user_data)
-        print(admin_data)
-        print(question_setter_data)
+        # print(isinstance(user_data, User))
+        # print(isinstance(admin_data, AdminDB))
+        # print(isinstance(question_setter_data, QuestionSetter))
+        #
+        # print(user_data)
+        # print(admin_data)
+        # print(question_setter_data)
 
         if user_data is not None:
             if check_password_hash(user_data.hashed_password, entered_password):
@@ -55,13 +55,13 @@ def login():
 @auth.route('/signup', methods=["GET", "POST"])
 def signup():
     if request.method == "POST":
-        user_name = request.form.get("new_username")
-        user_emailid = request.form.get("new_email")
-        user_first_name = request.form.get("user_first_name")
-        user_last_name = request.form.get("user_last_name")
+        user_name = request.form.get("inputUserName")
+        user_emailid = request.form.get("inputEmail")
+        user_first_name = request.form.get("inputFirstName")
+        user_last_name = request.form.get("inputLastName")
         user_created_at = datetime.now()
-        user_password = request.form.get("new_password")
-        user_confirmed_password = request.form.get("new_confirm_password")
+        user_password = request.form.get("inputPassword")
+        user_confirmed_password = request.form.get("inputConfirmPassword")
 
         hashed_password = generate_password_hash(user_password)
 
@@ -83,7 +83,7 @@ def signup():
             db.session.add(user_db_obj)
             db.session.commit()
 
-        return render_template('homepage.html')
+            return redirect(url_for('auth.login'))
     else:
         return render_template('signup_page.html')
 

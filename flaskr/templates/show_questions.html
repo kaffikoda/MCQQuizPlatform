@@ -11,9 +11,12 @@
                 {% else %}
                     <a href="" class="list-group-item list-group-item-danger"  data-toggle="modal" data-target="#exampleModal{{question_number}}">Question {{question_number+1}}.</a>
                 {% endif %}
+            {% else %}
+                <a href="" class="list-group-item list-group-item-action"  data-toggle="modal" data-target="#exampleModal{{question_number}}">Question {{question_number+1}}.</a>
             {% endif %}
+        {% else %}
+            <a href="" class="list-group-item list-group-item-action"  data-toggle="modal" data-target="#exampleModal{{question_number}}">Question {{question_number+1}}.</a>
         {% endif %}
-        <a href="" class="list-group-item list-group-item-action"  data-toggle="modal" data-target="#exampleModal{{question_number}}">Question {{question_number+1}}.</a>
             <!-- Modal -->
             <div class="modal fade" id="exampleModal{{question_number}}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
                 <div class="modal-dialog modal-dialog-centered" role="document">
@@ -63,7 +66,12 @@
             </div>
             </div>
     {% endfor %}
+
+    {% if flag == 0 %}
+        <p>You score:- {{user_score}} out of {{number_of_questions}}</p>
+    {% endif %}
 {% endblock %}
+
 {% block button%}
 <a href="{{url_for('views.home')}}" class="btn btn-primary" role="button">Go to Homepage</a>
 {% endblock %}

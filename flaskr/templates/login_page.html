@@ -1,15 +1,29 @@
 {% extends "base.html" %}
 {% block title %}Login{% endblock %}
 {% block content %}
-<form action="#" method="post">
-        <p>
-            <label for="login_username"> <b>Enter username</b> </label>
-            <input id="login_username" type="text" placeholder="Enter username" name="login_username" size=50 required><br>
-        </p>
-        <p>
-            <label for="login_password"><b>Enter password</b></label>
-            <input id="login_password" type="password" placeholder="Enter password" name="login_password" minlength="8" size=50 required><br>
-        </p>
-        <input id="login_button" type="submit" name="login_button" value="Login">
+
+<form action="" method="post">
+    <div class="form-group row">
+        <div class="col-sm-10">
+            <h4>Enter your credentials</h4>
+        </div>
+    </div>
+    <div class="form-group row">
+        <label for="loginUserName" class="col-sm-2 col-form-label">Username:- </label>
+        <div class="col-sm-10">
+            <input type="text" class="form-control" id="loginUserName" name="loginUserName" placeholder="Enter username" size=50 required>
+        </div>
+    </div>
+    <div class="form-group row">
+        <label for="loginPassword" class="col-sm-2 col-form-label">Password:- </label>
+        <div class="col-sm-10">
+            <input type="password" class="form-control" id="loginPassword" name="loginPassword" placeholder="Enter password" required>
+        </div>
+    </div>
+    <div class="form-group row">
+        <div class="col-sm-10">
+            <button type="submit" class="btn btn-primary" name="loginButton">Login</button>
+        </div>
+    </div>
 </form>
 {% endblock %}

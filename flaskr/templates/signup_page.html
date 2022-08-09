@@ -1,37 +1,60 @@
 {% extends "base.html" %}
 {% block title %}SignUp Page{% endblock %}
+
 {% block content %}
-<h1>Enter your details for registrations</h1>
-    <form action="#" method="post">
-        <p>
-            <label for="user_first_name"><b>Enter first name</b></label>
-            <input id="user_first_name" type="text" placeholder="Enter first name" name="user_first_name" size=50 required>
-        </p>
+<form action="" method="post">
+  <div class="form-group row">
+        <div class="col-sm-10">
+            <h4>Enter details to signup</h4>
+        </div>
+    </div>
+  <div class="form-group row">
+    <label for="inputFirstName" class="col-sm-2 col-form-label">First name:- </label>
+    <div class="col-sm-10">
+      <input type="text" class="form-control" id="inputFirstName" name="inputFirstName" placeholder="Enter first name" size=50 required>
+    </div>
+  </div>
 
-        <p>
-            <label for="user_last_name"><b>Enter last name</b></label>
-            <input id="user_last_name" type="text" placeholder="Enter first name" name="user_last_name" size=50 required>
-        </p>
+  <div class="form-group row">
+    <label for="inputLastName" class="col-sm-2 col-form-label">Last name:- </label>
+    <div class="col-sm-10">
+      <input type="text" class="form-control" id="inputLastName" name="inputLastName" placeholder="Enter last name" size=50 required>
+    </div>
+  </div>
 
-        <p>
-            <label for="new_username"><b>Enter username</b></label>
-            <input id="new_username" type="text" placeholder="Enter username" name="new_username" size=50 required>
-        </p>
+  <div class="form-group row">
+    <label for="inputUserName" class="col-sm-2 col-form-label">Username:- </label>
+    <div class="col-sm-10">
+      <input type="text" class="form-control" id="inputUserName" name="inputUserName" placeholder="Enter username" size=50 required>
+    </div>
+  </div>
 
-        <p>
-            <label for="new_email"><b>Enter email</b></label>
-            <input id="new_email" type="text" placeholder="Enter email" name="new_email" size=50 required>
-        </p>
+  <div class="form-group row">
+    <label for="inputEmail" class="col-sm-2 col-form-label">Emailid:- </label>
+    <div class="col-sm-10">
+      <input type="email" class="form-control" id="inputEmail" name="inputEmail" placeholder="Enter emailid" required>
+    </div>
+  </div>
 
-        <p>
-            <label for="new_password"><b>Enter password</b></label>
-            <input id="new_password" type="password" placeholder="Enter password" name="new_password" minlength="8" size=50 required>
-        </p>
+  <div class="form-group row">
+    <label for="inputPassword" class="col-sm-2 col-form-label">Password:- </label>
+    <div class="col-sm-10">
+      <input type="password" class="form-control" id="inputPassword" name="inputPassword" placeholder="Enter password" minlength=8 required>
+    </div>
+  </div>
 
-        <p>
-            <label for="new_confirm_password"><b>Confirm password</b></label>
-            <input id="new_confirm_password" type="password" placeholder="Confirm password" minlength="8" name="new_confirm_password" size=50 required><br>
-        </p>
-        <input id="register_button" type="submit" name="signup_submit" value="Register">
-    </form>
+  <div class="form-group row">
+    <label for="inputConfirmPassword" class="col-sm-2 col-form-label">Confirm Password:- </label>
+    <div class="col-sm-10">
+      <input type="password" class="form-control" id="inputConfirmPassword" name="inputConfirmPassword" placeholder="Enter confirm password" minlength=8 required>
+    </div>
+  </div>
+
+
+  <div class="form-group row">
+    <div class="col-sm-10">
+      <button type="submit" class="btn btn-primary" name="signUpButton">Sign up</button>
+    </div>
+  </div>
+</form>
 {% endblock %}
