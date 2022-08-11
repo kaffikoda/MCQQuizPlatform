@@ -27,27 +27,27 @@ def login():
 
         if user_data is not None:
             if check_password_hash(user_data.hashed_password, entered_password):
-                flash("Logged in as user", category="success")
                 login_user(user=user_data, remember=True)
+                flash(f"Welcome back, {current_user.username}!!!!!", category="success")
                 return redirect(url_for('views.home'))
             else:
-                flash("Please enter correct password", category="error")
+                flash("Please enter correct password", category="warning")
         elif admin_data is not None:
             if check_password_hash(admin_data.hashed_password, entered_password):
-                flash("Logged in as admin", category="success")
                 login_user(user=admin_data, remember=True)
+                flash(f"Welcome back, {current_user.admin_username}!!!!!", category="success")
                 return redirect(url_for('views.home'))
             else:
-                flash("Please enter correct password", category="error")
+                flash("Please enter correct password", category="warning")
         elif question_setter_data is not None:
             if check_password_hash(question_setter_data.hashed_password, entered_password):
-                flash("Logged in as question setter", category="success")
                 login_user(user=question_setter_data, remember=True)
+                flash(f"Welcome back, {current_user.question_setter_username}!!!!!", category="success")
                 return redirect(url_for('views.home'))
             else:
-                flash("Please enter correct password", category="error")
+                flash("Please enter correct password", category="warning")
         else:
-            flash("User doesn't exists")
+            flash("Entered username doesn't exists", category="info")
 
     return render_template('login_page.html')
 

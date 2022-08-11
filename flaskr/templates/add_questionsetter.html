@@ -1,127 +1,62 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <title>Create Quiz</title>
-  <link
-  rel="stylesheet"
-  href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
-  integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh"
-  crossorigin="anonymous"
-  />
-  <link
-  rel="stylesheet"
-  href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css"
-  crossorigin="anonymous"
-  />
-</head>
-<body>
-  <!-- Button trigger modal -->
-  <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModalCenter">
-    Add Question Setter
-  </button>
+{% extends "logged_in_base.html" %}
+{% block title %}Register Question Setter{% endblock %}
 
-  <!-- Modal -->
-  <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered" role="document">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title" id="exampleModalLongTitle">Enter Question Setter Details</h5>
-          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-            <span aria-hidden="true">&times;</span>
-          </button>
+{% block button1 %}
+<div class="container">
+<form action="" method="post">
+  <div class="form-group row">
+        <div class="col-sm-10">
+            <h4>Enter details to register Question Setter</h4>
         </div>
-        <div class="modal-body">
-          <form action="" method="POST">
-            <fieldset class="form-group">
-                <div class="form-group row">
-                    <label for="inputQSFirstName" class="col-sm-2 col-form-label">First name</label>
-                    <div class="col-sm-10">
-                        <input type="text" class="form-control" id="inputQSFirstName" name="inputQSFirstName" placeholder="Enter first name" size=50 required>
-                    </div>
-                </div>
-
-                <div class="form-group row">
-                    <label for="inputQSLastName" class="col-sm-2 col-form-label">Last name</label>
-                    <div class="col-sm-10">
-                        <input type="text" class="form-control" id="inputQSLastName" name="inputQSLastName" placeholder="Enter last name" size=50 required>
-                    </div>
-                </div>
-
-                <div class="form-group row">
-                    <label for="inputQSUserName" class="col-sm-2 col-form-label">Username</label>
-                    <div class="col-sm-10">
-                        <input type="text" class="form-control" id="inputQSUserName" name="inputQSUserName" placeholder="Enter username" size=50 required>
-                    </div>
-                </div>
-
-                <div class="form-group row">
-                    <label for="inputQSEmail" class="col-sm-2 col-form-label">Email</label>
-                    <div class="col-sm-10">
-                        <input type="email" class="form-control" id="inputQSEmail" name="inputQSEmail" placeholder="Enter email" required>
-                    </div>
-                </div>
-
-                <div class="form-group row">
-                    <label for="inputQSPassword" class="col-sm-2 col-form-label">Password </label>
-                    <div class="col-sm-10">
-                        <input type="password" class="form-control" id="inputQSPassword" name="inputQSPassword" placeholder="Enter password" minlength=8 required>
-                     </div>
-                </div>
-
-                <div class="form-group row">
-                    <label for="inputQSConfirmPassword" class="col-sm-2 col-form-label">Confirm Password </label>
-                    <div class="col-sm-10">
-                        <input type="password" class="form-control" id="inputQSConfirmPassword" name="inputQSConfirmPassword" placeholder="Enter confirm password" minlength=8 required>
-                     </div>
-                </div>
-
-              <div class="modal-footer">
-                <button class="btn btn-secondary" data-dismiss="modal" type="submit" value="Close">Close</button>
-                <button class="btn btn-primary" type="submit" value="Add QS" id="addQuestionSetter" name="addQuestionSetter">Add Question Setter</button>
-              </div>
-            </fieldset>
-          </form>
-        </div>
-      </div>
+    </div>
+  <div class="form-group row">
+    <label for="inputQSFirstName" class="col-sm-2 col-form-label">First name:- </label>
+    <div class="col-sm-10">
+      <input type="text" class="form-control" id="inputQSFirstName" name="inputQSFirstName" placeholder="Enter first name" size=50 required>
     </div>
   </div>
-   <div class="table-responsive">
-     <table class="table table-bordered">
-			<tr>
-				<th>Question Setter Id</th>
-				<th>First Name</th>
-				<th>Last Name</th>
-				<th>Username</th>
-                <th>Created At</th>
-			</tr>
 
-<!--			{% for questions in questions_created_tillnow %}-->
-<!--			<tr>-->
-<!--				<td>{{ questions.question }}</td>-->
-<!--				<td>{{ questions.first_option }}</td>-->
-<!--				<td>{{ questions.second_option }}</td>-->
-<!--				<td>{{ questions.third_option }}</td>-->
-<!--				<td>{{ questions.fourth_option }}</td>-->
-<!--                <td>{{ questions.correct_answer }}</td>-->
-<!--			</tr>-->
-<!--            {% endfor %}-->
-		</table>
-   </div>
-  <script
-  src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
-  integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
-  crossorigin="anonymous"
-  ></script>
-  <script
-  src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"
-  integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
-  crossorigin="anonymous"
-  ></script>
-  <script
-  src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"
-  integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
-  crossorigin="anonymous"
-  ></script>
-</body>
-</html>
+  <div class="form-group row">
+    <label for="inputQSLastName" class="col-sm-2 col-form-label">Last name:- </label>
+    <div class="col-sm-10">
+      <input type="text" class="form-control" id="inputQSLastName" name="inputQSLastName" placeholder="Enter last name" size=50 required>
+    </div>
+  </div>
+
+  <div class="form-group row">
+    <label for="inputQSUserName" class="col-sm-2 col-form-label">Username:- </label>
+    <div class="col-sm-10">
+      <input type="text" class="form-control" id="inputQSUserName" name="inputQSUserName" placeholder="Enter username" size=50 required>
+    </div>
+  </div>
+
+  <div class="form-group row">
+    <label for="inputQSEmail" class="col-sm-2 col-form-label">Emailid:- </label>
+    <div class="col-sm-10">
+      <input type="email" class="form-control" id="inputQSEmail" name="inputQSEmail" placeholder="Enter emailid" required>
+    </div>
+  </div>
+
+  <div class="form-group row">
+    <label for="inputQSPassword" class="col-sm-2 col-form-label">Password:- </label>
+    <div class="col-sm-10">
+      <input type="password" class="form-control" id="inputQSPassword" name="inputQSPassword" placeholder="Enter password" minlength=8 required>
+    </div>
+  </div>
+
+  <div class="form-group row">
+    <label for="inputQSConfirmPassword" class="col-sm-2 col-form-label">Confirm Password:- </label>
+    <div class="col-sm-10">
+      <input type="password" class="form-control" id="inputQSConfirmPassword" name="inputQSConfirmPassword" placeholder="Enter confirm password" minlength=8 required>
+    </div>
+  </div>
+
+
+  <div class="form-group row">
+    <div class="col-sm-10">
+      <button type="submit" class="btn btn-primary" name="registerButton">Register</button>
+    </div>
+  </div>
+</form>
+</div>
+{% endblock %}

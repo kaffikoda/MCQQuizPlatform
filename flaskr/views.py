@@ -76,7 +76,7 @@ def add_questionsetter():
 
         if question_setter_password != question_setter_confirmed_password:
             print("Please type correct confirmed password")
-            return redirect(url_for('admin_page'))
+            return redirect(url_for('views.add_questionsetter'))
         elif qs_search_username is None and qs_search_email is None:
             question_setter_obj = QuestionSetter(question_setter_username, question_setter_emailid,
                                                  question_setter_first_name, question_setter_last_name,
