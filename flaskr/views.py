@@ -51,7 +51,6 @@ def home():
         return render_template('question_setter_page.html')
     elif isinstance(current_user, User) and current_user.is_authenticated:
         return render_template('user_page.html')
-
     return render_template('admin_page.html')
 
 
