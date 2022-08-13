@@ -17,7 +17,7 @@ DB_NAME = os.environ.get('DB_NAME')
 
 def create_app():
     app = Flask(__name__)
-    app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get('SQLALCHEMY_DATABASE_URI')+DB_NAME
+    app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get('DATABASE_URL')+DB_NAME
     app.config['SECRET_KEY'] = os.environ.get('SECRET_KEY')
 
     # db.init_app(app)
