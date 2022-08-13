@@ -15,7 +15,6 @@ cycler==0.10.0
 decorator==4.4.1
 defusedxml==0.6.0
 distro==1.5.0
-dotenv-python==0.0.1
 entrypoints==0.3
 et-xmlfile==1.0.1
 Faker==8.1.2
