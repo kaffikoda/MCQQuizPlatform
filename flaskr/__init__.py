@@ -21,11 +21,6 @@ def create_app():
     app.config['SECRET_KEY'] = os.environ.get('SECRET_KEY')
     app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
-    # db.init_app(app)
-    # db.app = app
-    # db.create_all()
-
-    # init_db(app)
 
     from .views import views
     from .auth import auth
