@@ -15,48 +15,22 @@ QUESTIONS_CREATED_TILLNOW = []
 
 @views.route('/')
 def homepage():
-    return render_template('homepage.html')
+    return redirect(url_for('auth.login'))
 
 
-@views.route('/home', methods=["GET", "POST"])
+@views.route('/home', methods=["GET"])  # takes to the home
 def home():
-    print(current_user)
-    if request.method == "POST":
-        question_setter_username = request.form.get("question-setter-username")
-        question_setter_emailid = request.form.get("question-setter-email")
-        question_setter_first_name = request.form.get("question-setter-first-name")
-        question_setter_last_name = request.form.get("question-setter-last-name")
-        question_setter_created_at = datetime.now()
-        question_setter_password = request.form.get("question-setter-password")
-        question_setter_confirmed_password = request.form.get("question-setter-confirm-password")
-        hashed_password = generate_password_hash(question_setter_password)
-
-        qs_search_username = QuestionSetter.query.filter_by(question_setter_username=question_setter_username).first()
-        qs_search_email = QuestionSetter.query.filter_by(question_setter_emailid=question_setter_emailid).first()
-
-        print(qs_search_email)
-        print(qs_search_username)
-
-        if question_setter_password != question_setter_confirmed_password:
-            print("Please type correct confirmed password")
-            return redirect(url_for('admin_page'))
-        elif qs_search_username is None and qs_search_email is None:
-            question_setter_obj = QuestionSetter(question_setter_username, question_setter_emailid,
-                                                 question_setter_first_name, question_setter_last_name,
-                                                 question_setter_created_at, hashed_password)
-            db.session.add(question_setter_obj)
-            db.session.commit()
-
     if isinstance(current_user, QuestionSetter) and current_user.is_authenticated:
-        return render_template('question_setter_page.html')
+        return redirect(url_for('views.created_quizzes'))
     elif isinstance(current_user, User) and current_user.is_authenticated:
-        return render_template('user_page.html')
-    return render_template('admin_page.html')
+        return redirect(url_for('views.available_quizzes'))
+
+    return redirect(url_for('views.add_questionsetter'))
 
 
-@views.route('/add_questionsetter', methods=["GET", "POST"])
+@views.route('/add_questionsetter', methods=["GET", "POST"])  # admin adds question setter
 def add_questionsetter():
-    print(current_user)
+    # print(current_user)
     if request.method == "POST":
         question_setter_username = request.form.get("inputQSUserName")
         question_setter_emailid = request.form.get("inputQSEmail")
@@ -82,11 +56,13 @@ def add_questionsetter():
                                                  question_setter_created_at, hashed_password)
             db.session.add(question_setter_obj)
             db.session.commit()
+        elif qs_search_username is not None or qs_search_email is not None:
+            print("Question setter with the given data already exists")
 
     return render_template('add_questionsetter.html')
 
 
-@views.route('/create_quiz', methods=["POST"])
+@views.route('/create_quiz', methods=["POST"])  # will be called when a question setter creates a new quiz
 def create_quiz():
     quiz_details_obj = QuizDetails(current_user.get_qid(), quiz_created_at=datetime.now(),
                                    quiz_name=request.form.get("quizName"))
@@ -96,9 +72,10 @@ def create_quiz():
     return redirect(url_for('views.create_questions', quiz_id=quiz_details_obj.quiz_id))
 
 
-@views.route('/create_question/<int:quiz_id>', methods=["GET", "POST"])
+@views.route('/create_question/<int:quiz_id>', methods=["GET", "POST"])  # creating questions for the quiz
 def create_questions(quiz_id):
     questions_created_tillnow_obj = QuizQuestions.query.filter_by(question_quiz_id=quiz_id)
+    print(ATTEMPTED_QUESTIONS_LIST)
 
     if request.method == "POST" and "addQuestion" in request.form:
         entered_question = request.form.get('inputQuestion')
@@ -111,12 +88,6 @@ def create_questions(quiz_id):
         print(request.form.get("correctOption"))
 
         quiz_details_obj = QuizDetails.query.filter_by(quiz_id=quiz_id).first()
-        # question_obj = QuizQuestions(question_quiz_id=quiz_details_obj.quiz_id, question=entered_question, first_option=first_option, second_option=second_option, third_option=third_option, fourth_option=fourth_option, correct_answer=correct_option, question_created_at=datetime.now(), question_setter_id=temp_obj.quiz_made_by)
-        # db.session.add(question_obj)
-        # db.session.commit()
-
-        # print(quiz_details_obj.quiz_id)
-        # print(quiz_details_obj.quiz_made_by)
 
         question_obj = QuizQuestions(question_quiz_id=quiz_id, question=entered_question,
                                      first_option=first_option, second_option=second_option, third_option=third_option,
@@ -126,29 +97,6 @@ def create_questions(quiz_id):
         db.session.add(question_obj)
         db.session.commit()
 
-        # question_obj = QuizQuestions(question_quiz_id=quiz_details_obj.quiz_id, question=entered_question, first_option=first_option, second_option=second_option, third_option=third_option, fourth_option=fourth_option, correct_answer=correct_option, question_created_at=datetime.now(), question_setter_id=100)
-        # db.session.add(question_obj)
-        # db.session.commit()
-
-        # return render_template("create_quiz.html")
-
-        # print(request.form.get('entered-question'))
-        # print(request.form.get('option1'))
-        # print(request.form.get('option2'))
-        # print(request.form.get('option3'))
-        # print(request.form.get('option4'))
-        # print(request.form.get('correctOption'))
-        # print(request.form.get('quiz-name'))
-
-        # questions_create_tillnow = QuizQuestions.query.filter_by(question_quiz_id=temp_obj.quiz_id).all()
-
-        # questions_created_tillnow = QuizQuestions.query.filter_by(question_quiz_id=quiz_id)
-        #
-        # global QUESTIONS_CREATED_TILLNOW
-        # QUESTIONS_CREATED_TILLNOW = [ques for ques in questions_created_tillnow]
-        #
-        # print(len(QUESTIONS_CREATED_TILLNOW))
-
         return redirect(url_for('views.create_questions', quiz_id=quiz_id))
 
     if questions_created_tillnow_obj is None:
@@ -157,36 +105,22 @@ def create_questions(quiz_id):
     questions_created_tillnow_list = [ques for ques in questions_created_tillnow_obj]
     number_of_questions = questions_created_tillnow_obj.count()
 
-    return render_template('create_quiz.html', questions_created_tillnow_list=questions_created_tillnow_list, number_of_questions=number_of_questions,
+    return render_template('create_quiz.html', questions_created_tillnow_list=questions_created_tillnow_list,
+                           number_of_questions=number_of_questions,
                            questions_created_tillnow_obj=questions_created_tillnow_obj)
 
 
-@views.route('/delete_question/<int:quiz_id>/<int:question_id>', methods=["GET", "POST"])
+@views.route('/delete_question/<int:quiz_id>/<int:question_id>',
+             methods=["GET", "POST"])  # deleting a question in a quiz
 def delete_question(quiz_id, question_id):
     delete_obj = QuizQuestions.query.filter_by(question_id=question_id).first()
     db.session.delete(delete_obj)
     db.session.commit()
 
-    # print(request)
-    #
-    # print("Hello!!!!!!!!!", request.form.get('deleteQuestion'))
-
-    # global qu
-    # qu = db.session.query(QuizQuestions).filter_by(question_quiz_id=quiz_id)
-    # print(db.session.query(QuizQuestions).filter_by(question_quiz_id=quiz_id))
-    # print(QuizQuestions.query.filter_by(question_quiz_id=quiz_id))
-    # print(qu)
-
-    # for temp in qu:
-    #     print(temp.question_quiz_id)
-
-    # if QuizQuestions.query.filter_by(question_quiz_id=quiz_id).first() is not None:
-    #     return render_template('create_quiz.html', questions_created_tillnow=qu)
-
     return redirect(url_for('views.create_questions', quiz_id=quiz_id))
 
 
-@views.route('/edit_question/<int:quiz_id>/<int:question_id>', methods=["POST"])
+@views.route('/edit_question/<int:quiz_id>/<int:question_id>', methods=["POST"])  # editing a question in a quiz
 def edit_question(quiz_id, question_id):
     questions_obj = db.session.query(QuizQuestions).get(question_id)
 
@@ -212,7 +146,7 @@ def edit_question(quiz_id, question_id):
     return redirect(url_for('views.create_questions', quiz_id=quiz_id))
 
 
-@views.route('/available_quizzes', methods=["GET"])
+@views.route('/available_quizzes', methods=["GET"])  # tells which quizzes are available for a user
 def available_quizzes():
     quiz_attempted_by_user = AttemptedDB.query.filter_by(quiz_attempted_by=current_user.user_id)
     quiz_attempted_by_user_list = [details.quiz_id for details in quiz_attempted_by_user]
@@ -220,10 +154,10 @@ def available_quizzes():
     all_quizzes_available = QuizDetails.query.all()
 
     return render_template('available_quizzes.html', quiz_attempted_by_user_list=quiz_attempted_by_user_list,
-                           all_quizzes_available=all_quizzes_available, flag=0)
+                           all_quizzes_available=all_quizzes_available, total_number_of_quizzes=len(all_quizzes_available))
 
 
-@views.route('/play_quiz/<int:quiz_id>', methods=["GET", "POST"])
+@views.route('/play_quiz/<int:quiz_id>', methods=["GET", "POST"])  # will be called when user is attempting a quiz
 def play_quiz(quiz_id):
     questions = QuizQuestions.query.filter_by(question_quiz_id=quiz_id)
 
@@ -288,7 +222,7 @@ def play_quiz(quiz_id):
                            attempted_questions_list=ATTEMPTED_QUESTIONS_LIST, quiz_id=quiz_id)
 
 
-@views.route('/attempted_quizzes', methods=["GET"])
+@views.route('/attempted_quizzes', methods=["GET"])  # tells which quizzes the user has attempted
 def attempted_quizzes():
     quiz_attempted_by_user = AttemptedDB.query.filter_by(quiz_attempted_by=current_user.user_id)
     attempted_by_user_list = [details.quiz_id for details in quiz_attempted_by_user]
@@ -296,10 +230,12 @@ def attempted_quizzes():
     all_quizzes_available = QuizDetails.query.all()
 
     return render_template('attempted_quizzes.html', all_quizzes_available=all_quizzes_available,
-                           attempted_by_user_list=attempted_by_user_list, flag=0)
+                           attempted_by_user_list=attempted_by_user_list, flag=0,
+                           total_number_of_quizzes=len(all_quizzes_available))
 
 
-@views.route('/questions/<int:quiz_id>', methods=["GET"])
+@views.route('/questions/<int:quiz_id>', methods=["GET"])  # shows the response oo the user and the content made by
+# the questionsetter
 def show_questions(quiz_id):
     questions_details_obj = QuizQuestions.query.filter_by(question_quiz_id=quiz_id)
     number_of_questions = questions_details_obj.count()
@@ -323,8 +259,8 @@ def show_questions(quiz_id):
                            number_of_questions=number_of_questions, flag=1)
 
 
-@views.route('/created_quizzes/', methods=["GET"])
+@views.route('/created_quizzes', methods=["GET"])  # tells about the quizzes made by the questionsetter
 def created_quizzes():
     quiz_created_by_qs = QuizDetails.query.filter_by(quiz_made_by=current_user.question_setter_id)
 
-    return render_template('attempted_quizzes.html', all_quizzes_available=quiz_created_by_qs, flag=1)
+    return render_template('question_setter_page.html', all_quizzes_available=quiz_created_by_qs, number_of_quizzes=quiz_created_by_qs.count())

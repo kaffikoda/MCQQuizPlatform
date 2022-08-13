@@ -1,9 +1,12 @@
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 from flask_login import LoginManager
+from dotenv import load_dotenv
+import os
 
+load_dotenv()
 db = SQLAlchemy()
-DB_NAME = "flask_movie"
+DB_NAME = os.environ.get('DB_NAME')
 
 
 # def init_db(app):
@@ -14,8 +17,8 @@ DB_NAME = "flask_movie"
 
 def create_app():
     app = Flask(__name__)
-    app.config['SQLALCHEMY_DATABASE_URI'] = f'postgresql://postgres:Database#2022@localhost/{DB_NAME}'
-    app.config['SECRET_KEY'] = '12345'
+    app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get('SQLALCHEMY_DATABASE_URI')+DB_NAME
+    app.config['SECRET_KEY'] = os.environ.get('SECRET_KEY')
 
     # db.init_app(app)
     # db.app = app

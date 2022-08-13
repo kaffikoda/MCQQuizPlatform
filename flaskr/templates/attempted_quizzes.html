@@ -1,18 +1,26 @@
 {% extends "logged_in_base.html" %}
 {% block title %}Quizzes{% endblock %}
 
+{%block content %}
+      <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav">
+                  <li class="nav-item active">
+                        <a class="nav-link" href="{{url_for('views.available_quizzes')}}">Play Quiz</a>
+                  </li>
+            </ul>
+      </div>
+{% endblock %}
 
 
 {% block quiz_name_content %}
-      {% if flag == 0 %}
+      {% if total_number_of_quizzes == attempted_by_user_list|length %}
+            <h3>You have no new quiz to be attempted!!!</h3>
+      {% else %}
+            <h3>You have attempted {{attempted_by_user_list|length}} quizzes!!!!!</h3><br>
             {% for quiz in all_quizzes_available %}
                   {% if quiz.quiz_id in attempted_by_user_list %}
                         <a href="{{url_for('views.show_questions', quiz_id=quiz.quiz_id)}}" class="list-group-item">{{ quiz.quiz_name }}</a>
                   {% endif %}
-            {% endfor %}
-      {% elif flag == 1 %}
-            {% for quiz in all_quizzes_available %}
-                  <a href="{{url_for('views.show_questions', quiz_id=quiz.quiz_id)}}" class="list-group-item">{{ quiz.quiz_name }}</a>
             {% endfor %}
       {% endif %}
 {% endblock %}

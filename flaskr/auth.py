@@ -28,21 +28,21 @@ def login():
         if user_data is not None:
             if check_password_hash(user_data.hashed_password, entered_password):
                 login_user(user=user_data, remember=True)
-                flash(f"Welcome back, {current_user.username}!!!!!", category="success")
+                # flash(f"Welcome back, {current_user.username}!!!!!", category="success")
                 return redirect(url_for('views.home'))
             else:
                 flash("Please enter correct password", category="warning")
         elif admin_data is not None:
             if check_password_hash(admin_data.hashed_password, entered_password):
                 login_user(user=admin_data, remember=True)
-                flash(f"Welcome back, {current_user.admin_username}!!!!!", category="success")
+                # flash(f"Welcome back, {current_user.admin_username}!!!!!", category="success")
                 return redirect(url_for('views.home'))
             else:
                 flash("Please enter correct password", category="warning")
         elif question_setter_data is not None:
             if check_password_hash(question_setter_data.hashed_password, entered_password):
                 login_user(user=question_setter_data, remember=True)
-                flash(f"Welcome back, {current_user.question_setter_username}!!!!!", category="success")
+                # flash(f"Welcome back, {current_user.question_setter_username}!!!!!", category="success")
                 return redirect(url_for('views.home'))
             else:
                 flash("Please enter correct password", category="warning")
@@ -71,10 +71,13 @@ def signup():
         admin_name_exists = AdminDB.query.filter_by(admin_username=user_name).first()
         admin_emailid_exists = AdminDB.query.filter_by(admin_emailid=user_emailid).first()
 
+        qs_name_exists = QuestionSetter.query.filter_by(question_setter_username=user_name).first()
+        qs_emailid_exists = QuestionSetter.query.filter_by(question_setter_emailid=user_emailid).first()
+
         if user_password != user_confirmed_password:
             print("Please type correct confirmed password")
             return redirect(url_for('signup_page'))
-        elif user_name_exists is not None or user_emailid_exists is not None or admin_name_exists is not None or admin_emailid_exists is not None:
+        elif user_name_exists is not None or user_emailid_exists is not None or admin_name_exists is not None or admin_emailid_exists is not None or qs_name_exists is not None or qs_emailid_exists is not None:
             print("User with the given credentials already exists")
             return redirect(url_for('homepage.html'))
         elif user_name_exists is None and user_emailid_exists is None:
@@ -83,7 +86,9 @@ def signup():
             db.session.add(user_db_obj)
             db.session.commit()
 
-            return redirect(url_for('auth.login'))
+            new_user_data = User.query.filter_by(username=user_name).first()
+            login_user(user=new_user_data, remember=True)
+            return redirect(url_for('views.home'))
     else:
         return render_template('signup_page.html')
 

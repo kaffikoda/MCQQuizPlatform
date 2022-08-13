@@ -1,22 +1,6 @@
 {% extends "logged_in_base.html" %}
 {% block title %} {{current_user.username}}'s Homepage{% endblock %}
 
-{% block button1 %}
-{% with messages = get_flashed_messages(with_categories=true) %}
-  {% if messages %}
-    {% for category, message in messages %}
-        <div class="alert alert-{{ category }}" role="alert">
-            <span>{{ message }}</span>
-            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                <span aria-hidden="true">×</span>
-            </button>
-        </div>
-    {% endfor %}
-  {% endif %}
-{% endwith %}
-{% endblock %}
-
-
 
 {%block content %}
 <div class="collapse navbar-collapse" id="navbarNav">
@@ -24,11 +8,6 @@
         <li class="nav-item">
             <a class="nav-link" href="{{url_for('views.available_quizzes')}}">Play Quiz</a>
         </li>
-        <li class="nav-item">
-            <a class="nav-link" href="{{url_for('views.attempted_quizzes')}}">See Attempted Quiz</a>
-        </li>
     </ul>
 </div>
 {% endblock %}
-
-
