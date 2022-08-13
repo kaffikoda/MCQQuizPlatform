@@ -9,6 +9,8 @@ def init_db(app):
     db.create_all()
 
 
+init_db(app)
+
 if __name__ == "__main__":
-    init_db(app)
+    # init_db(app)
     app.run(debug=True)
