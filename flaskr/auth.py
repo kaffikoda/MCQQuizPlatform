@@ -79,7 +79,7 @@ def signup():
             return redirect(url_for('signup_page'))
         elif user_name_exists is not None or user_emailid_exists is not None or admin_name_exists is not None or admin_emailid_exists is not None or qs_name_exists is not None or qs_emailid_exists is not None:
             print("User with the given credentials already exists")
-            return redirect(url_for('homepage.html'))
+            return redirect(url_for('views.homepage'))
         elif user_name_exists is None and user_emailid_exists is None:
             user_db_obj = User(user_name, user_emailid, user_first_name, user_last_name, user_created_at,
                                hashed_password)

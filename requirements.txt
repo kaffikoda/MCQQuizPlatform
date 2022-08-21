@@ -85,3 +85,8 @@ Werkzeug==2.1.2
 whitenoise==5.2.0
 WTForms==3.0.1
 zipp==2.0.0
+
+
+**Let'sQuiz** is a mcq platform where users register on the platform and attempt quizzes made by the question setter of the platform to check
+their general knowledge. This project is made by using **Python** as programming language, **Flask** as backend framework, **Postgres** as DBMS and **SQLAlchemy**
+as ORM.
